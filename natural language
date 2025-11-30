@@ -1,1 +1,36 @@
-namendvn skrefniuv
+import nltk
+from textblob import TextBlob
+import spacy
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from collections import Counter
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+nlp = spacy.load("en_core_web_sm") 
+
+text = """
+OpenAI is an AI research lab that creates powerful AI models. 
+Many companies, including Microsoft, use OpenAI's tools to enhance productivity.
+"""
+
+tokens = word_tokenize(text)
+stop_words = set(stopwords.words('english'))
+filtered_tokens = [word for word in tokens if word.lower() not in stop_words and word.isalpha()]
+
+print("Filtered tokens:", filtered_tokens)
+
+blob = TextBlob(text)
+print(f"Sentiment Polarity: {blob.sentiment.polarity}")
+print(f"Sentiment Subjectivity: {blob.sentiment.subjectivity}")
+
+doc = nlp(text)
+
+print("\nNamed Entities:")
+for ent in doc.ents:
+    print(ent.text, " - ", ent.label_)
+
+word_freq = Counter(filtered_tokens)
+
+print("\nTop Keywords:", word_freq.most_common(5))
